@@ -326,17 +326,17 @@ class MoonLocation(u.Quantity):
 
     @property
     def x(self):
-        """The X component of the geocentric coordinates."""
+        """The X component of the selenocentric coordinates."""
         return self['x']
 
     @property
     def y(self):
-        """The Y component of the geocentric coordinates."""
+        """The Y component of the selenocentric coordinates."""
         return self['y']
 
     @property
     def z(self):
-        """The Z component of the geocentric coordinates."""
+        """The Z component of the selenocentric coordinates."""
         return self['z']
 
     def __getitem__(self, item):
