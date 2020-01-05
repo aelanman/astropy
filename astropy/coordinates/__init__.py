@@ -12,6 +12,7 @@ from .baseframe import *
 from .attributes import *
 from .distances import *
 from .earth import *
+from .moon import *
 from .transformations import *
 from .builtin_frames import *
 from .name_resolve import *
