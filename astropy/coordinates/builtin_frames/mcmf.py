@@ -6,7 +6,7 @@ from astropy.coordinates.representation import CartesianRepresentation, Cartesia
 from astropy.coordinates.baseframe import BaseCoordinateFrame, base_doc
 from astropy.coordinates.attributes import TimeAttribute
 from astropy.time import Time
-from astropy.utils.data import get_pkg_data_filenames 
+from astropy.utils.data import download_files_in_parallel
 from .utils import DEFAULT_OBSTIME
 
 from astropy.coordinates.baseframe import frame_transform_graph
@@ -18,6 +18,8 @@ import os
 import spiceypy as spice
 
 __all__ = ['MCMF']
+
+_naif_kernel_url = 'https://naif.jpl.nasa.gov/pub/naif/generic_kernels'
 
 
 @format_doc(base_doc, components="", footer="")
@@ -49,7 +51,12 @@ class MCMF(BaseCoordinateFrame):
 def icrs_to_mcmf_mat(time):
     #  Rotation matrix from ICRS to MOON_ME
 
-    kernel_paths = get_pkg_data_filenames('data/spice_kernels', 'astropy.coordinates')
+    kernel_names = ['pck/moon_pa_de421_1900-2050.bpc',
+                    'fk/satellites/moon_080317.tf',
+                    'fk/satellites/moon_assoc_me.tf']
+
+    kernel_urls = [_naif_kernel_url + '/' + kn for kn in kernel_names]
+    kernel_paths = download_files_in_parallel(kernel_urls, cache=True)
 
     for kern in kernel_paths:
         #spice.furnsh(os.path.join(kernpath, k))
