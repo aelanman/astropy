@@ -96,18 +96,17 @@ class MoonLocation(u.Quantity):
 
     Positions may be defined in Cartesian (x, y, z) coordinates with respect to the
     center of mass of the Moon, or in ``geodetic'' coordinates (longitude, latitude). In geodetic coordinates,
-    positions are on the surface exactly. The shape of the Moon is defined by [!!!!] in SPICE.
-            >> !!! QUESTION -- How does the (binary) spice kernel define the shape of the moon's surface?
-            >>                 This will determine how lat/lon/height is interpreted.
+    positions are on the surface exactly.
 
     (See "A Standardized Lunar Coordinate System for the Lunar Reconnaissance Orbiter and Lunar Datasets")
+        (TODO -- Add this reference)
 
 
     Notes
     -----
     This class fits into the coordinates transformation framework in that it
-    encodes a position on the `~astropy.coordinates.ITRS` frame.  To get a
-    proper `~astropy.coordinates.ITRS` object from this object, use the ``itrs``
+    encodes a position on the `~astropy.coordinates.MCMF` frame.  To get a
+    proper `~astropy.coordinates.MCMF` object from this object, use the ``mcmf``
     property.
     """
 
@@ -163,13 +162,13 @@ class MoonLocation(u.Quantity):
             try:
                 unit = x.unit
             except AttributeError:
-                raise TypeError("Geocentric coordinates should be Quantities "
+                raise TypeError("Selenocentric coordinates should be Quantities "
                                 "unless an explicit unit is given.")
         else:
             unit = u.Unit(unit)
 
         if unit.physical_type != 'length':
-            raise u.UnitsError("Geocentric coordinates should be in "
+            raise u.UnitsError("Selenocentric coordinates should be in "
                                "units of length.")
 
         try:
@@ -177,7 +176,7 @@ class MoonLocation(u.Quantity):
             y = u.Quantity(y, unit, copy=False)
             z = u.Quantity(z, unit, copy=False)
         except u.UnitsError:
-            raise u.UnitsError("Geocentric coordinate units should all be "
+            raise u.UnitsError("Selenocentric coordinate units should all be "
                                "consistent.")
 
         x, y, z = np.broadcast_arrays(x, y, z)
@@ -218,9 +217,6 @@ class MoonLocation(u.Quantity):
         off from the mean rotation axis. Longitude is defined
         relative to a prime meridian, which is itself given by
         the mean position of the "sub-Earth" point on the lunar surface.
-
-        For more informatinon, see the definition of the MOON_ME frame
-        at [!!!CITATION!!!].
 
         """
         lon = Longitude(lon, u.degree, wrap_angle=180 * u.degree, copy=False)
